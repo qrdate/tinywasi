@@ -1,0 +1,21 @@
+{
+  "name": "tinywasi",
+  "version": "1.0.0",
+  "description": "A tiny WASI runtime",
+  "main": "dist/TinyWASI.js",
+  "types": "dist/TinyWASI.d.ts",
+  "type": "module",
+  "scripts": {
+    "prepare": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "QRDate",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "typescript": "^4.6.2"
+  },
+	"files": [
+		"dist/"
+	]
+}
