@@ -80,6 +80,14 @@ export class TinyWASI
 		initialize();
 	}
 
+	start( instance: WebAssembly.Instance )
+	{
+		this.instance = instance;
+
+		const start = instance.exports._start as CallableFunction;
+		start();
+	}
+
 
 	private getMemory(): WebAssembly.Memory | undefined
 	{
