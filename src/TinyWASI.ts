@@ -11,7 +11,7 @@ export class TinyWASI
 
 	private WASI_FILETYPE_CHARACTER_DEVICE = 2;
 
-	imports: { [ key: string ]: { [ key: string ]: CallableFunction | undefined } } = {
+	private nameSpaces: { [ key: string ]: { [ key: string ]: CallableFunction | undefined } } = {
 		wasi_snapshot_preview1:
 		{
 			args_get: undefined, // ((param i32 i32) (result i32))
@@ -74,9 +74,9 @@ export class TinyWASI
 
 	constructor( trace?: boolean )
 	{
-		for( let ns of Object.keys( this.imports ) )
+		for( let ns of Object.keys( this.nameSpaces ) )
 		{
-			const nameSpace = this.imports[ ns ];
+			const nameSpace = this.nameSpaces[ ns ];
 
 			for( let fn of Object.keys( nameSpace ) )
 			{
@@ -100,6 +100,10 @@ export class TinyWASI
 		initialize();
 	}
 
+	get imports(): WebAssembly.Imports
+	{
+		return this.nameSpaces as WebAssembly.Imports;
+	}
 
 	private getMemory(): WebAssembly.Memory
 	{
