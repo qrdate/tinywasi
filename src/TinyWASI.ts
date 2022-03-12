@@ -72,6 +72,23 @@ export class TinyWASI
 	};
 
 
+	constructor( trace?: boolean )
+	{
+		if( trace )
+		{
+			for( let ns of Object.keys( this.imports ) )
+			{
+				const nameSpace = this.imports[ ns ];
+
+				for( let f of Object.keys( nameSpace ) )
+				{
+					const origFunc = nameSpace[ f ];
+					nameSpace[ f ] = this.trace( f, origFunc );
+				}
+			}
+		}
+	}
+
 	initialize( instance: WebAssembly.Instance )
 	{
 		this.instance = instance;
@@ -101,6 +118,15 @@ export class TinyWASI
 			return new DataView( ( this.instance.exports.memory as WebAssembly.Memory ).buffer );
 	}
 
+	private trace( name: string, origFunc: CallableFunction ): CallableFunction
+	{
+		return ( ...args: number[] ): number =>
+		{
+			const result = origFunc( ...args );
+			console.log( `Trace: ${name}(${args.toString()}) -> ${result}` );
+			return result;
+		}
+	}
 
 	private nosys( name: string ): CallableFunction
 	{
