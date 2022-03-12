@@ -8,83 +8,90 @@ export class TinyWASI
 	private WASI_ERRNO_BADF = 8;
 	private WASI_ERRNO_FAULT = 21;
 	private WASI_ERRNO_NOSYS = 52;
+	private WASI_ERRNO_INVAL = 28;
 
 	private WASI_FILETYPE_CHARACTER_DEVICE = 2;
 
-	imports = {
+	imports: { [ key: string ]: { [ key: string ]: CallableFunction | undefined } } = {
 		wasi_snapshot_preview1:
 		{
-			args_get: this.nosys( "args_get" ).bind( this ), // (param i32 i32) (result i32))
-			args_sizes_get: this.nosys( "args_sizes_get" ).bind( this ), // (param i32 i32) (result i32))
+			args_get: this.args_get, // ((param i32 i32) (result i32))
+			args_sizes_get: this.args_sizes_get, // ((param i32 i32) (result i32))
 
-			clock_res_get: this.nosys( "clock_res_get" ).bind( this ), // (param i32 i32) (result i32))
-			clock_time_get: this.clock_time_get.bind( this ), // (param i32 i64 i32) (result i32))
+			clock_res_get: this.clock_res_get, // ((param i32 i32) (result i32))
+			clock_time_get: this.clock_time_get, // ((param i32 i64 i32) (result i32))
 
-			environ_get: this.nosys( "environ_get" ).bind( this ), // (param i32 i32) (result i32))
-			environ_sizes_get: this.nosys( "environ_sizes_get" ).bind( this ), // (param i32 i32) (result i32))
+			environ_get: this.environ_get, // ((param i32 i32) (result i32))
+			environ_sizes_get: this.environ_sizes_get, // ((param i32 i32) (result i32))
 
-			fd_advise: this.nosys( "fd_advise" ).bind( this ), // (param i32 i64 i64 i32) (result i32))
-			fd_allocate: this.nosys( "fd_allocate" ).bind( this ), // (param i32 i64 i64) (result i32))
-			fd_close: this.nosys( "fd_close" ).bind( this ), // (param i32) (result i32))
-			fd_datasync: this.nosys( "fd_datasync" ).bind( this ), // (param i32) (result i32))
-			fd_fdstat_get: this.fd_fdstat_get.bind( this ), // (param i32 i32) (result i32))
-			fd_fdstat_set_flags: this.nosys( "fd_fdstat_set_flags" ).bind( this ), // (param i32 i32) (result i32))
-			fd_fdstat_set_rights: this.nosys( "fd_fdstat_set_rights" ).bind( this ), // (param i32 i64 i64) (result i32))
-			fd_filestat_get: this.nosys( "fd_filestat_get" ).bind( this ), // (param i32 i32) (result i32))
-			fd_filestat_set_size: this.nosys( "fd_filestat_set_size" ).bind( this ), // (param i32 i64) (result i32))
-			fd_filestat_set_times: this.nosys( "fd_filestat_set_times" ).bind( this ), // (param i32 i64 i64 i32) (result i32))
-			fd_pread: this.nosys( "fd_pread" ).bind( this ), // (param i32 i32 i32 i64 i32) (result i32))
-			fd_prestat_dir_name: this.nosys( "fd_prestat_dir_name" ).bind( this ), // (param i32 i32 i32) (result i32))
-			fd_prestat_get: this.nosys( "fd_prestat_get" ).bind( this ), // (param i32 i32) (result i32))
-			fd_pwrite: this.nosys( "fd_pwrite" ).bind( this ), // (param i32 i32 i32 i64 i32) (result i32))
-			fd_read: this.nosys( "fd_read" ).bind( this ), // (param i32 i32 i32 i32) (result i32))
-			fd_readdir: this.nosys( "fd_readdir" ).bind( this ), // (param i32 i32 i32 i64 i32) (result i32))
-			fd_renumber: this.nosys( "fd_renumber" ).bind( this ), // (param i32 i32) (result i32))
-			fd_seek: this.nosys( "fd_seek" ).bind( this ), // (param i32 i64 i32 i32) (result i32))
-			fd_sync: this.nosys( "fd_sync" ).bind( this ), // (param i32) (result i32))
-			fd_tell: this.nosys( "fd_tell" ).bind( this ), // (param i32 i32) (result i32))
-			fd_write: this.fd_write.bind( this ), // (param i32 i32 i32 i32) (result i32))
+			fd_advise: undefined, // ((param i32 i64 i64 i32) (result i32))
+			fd_allocate: undefined, // ((param i32 i64 i64) (result i32))
+			fd_close: undefined, // ((param i32) (result i32))
+			fd_datasync: undefined, // ((param i32) (result i32))
+			fd_fdstat_get: this.fd_fdstat_get, // ((param i32 i32) (result i32))
+			fd_fdstat_set_flags: undefined, // ((param i32 i32) (result i32))
+			fd_fdstat_set_rights: undefined, // ((param i32 i64 i64) (result i32))
+			fd_filestat_get: undefined, // ((param i32 i32) (result i32))
+			fd_filestat_set_size: undefined, // ((param i32 i64) (result i32))
+			fd_filestat_set_times: undefined, // ((param i32 i64 i64 i32) (result i32))
+			fd_pread: undefined, // ((param i32 i32 i32 i64 i32) (result i32))
+			fd_prestat_dir_name: undefined, // ((param i32 i32 i32) (result i32))
+			fd_prestat_get: undefined, // ((param i32 i32) (result i32))
+			fd_pwrite: undefined, // ((param i32 i32 i32 i64 i32) (result i32))
+			fd_read: undefined, // ((param i32 i32 i32 i32) (result i32))
+			fd_readdir: undefined, // ((param i32 i32 i32 i64 i32) (result i32))
+			fd_renumber: undefined, // ((param i32 i32) (result i32))
+			fd_seek: undefined, // ((param i32 i64 i32 i32) (result i32))
+			fd_sync: undefined, // ((param i32) (result i32))
+			fd_tell: undefined, // ((param i32 i32) (result i32))
+			fd_write: this.fd_write, // ((param i32 i32 i32 i32) (result i32))
 
-			path_create_directory: this.nosys( "path_create_directory" ).bind( this ), // (param i32 i32 i32) (result i32))
-			path_filestat_get: this.nosys( "path_filestat_get" ).bind( this ), // (param i32 i32 i32 i32 i32) (result i32))
-			path_filestat_set_times: this.nosys( "path_filestat_set_times" ).bind( this ), // (param i32 i32 i32 i32 i64 i64 i32) (result i32))
-			path_link: this.nosys( "path_link" ).bind( this ), // (param i32 i32 i32 i32 i32 i32 i32) (result i32))
-			path_open: this.nosys( "path_open" ).bind( this ), // (param i32 i32 i32 i32 i32 i64 i64 i32 i32) (result i32))
-			path_readlink: this.nosys( "path_readlink" ).bind( this ), // (param i32 i32 i32 i32 i32 i32) (result i32))
-			path_remove_directory: this.nosys( "path_remove_directory" ).bind( this ), // (param i32 i32 i32) (result i32))
-			path_rename: this.nosys( "path_rename" ).bind( this ), // (param i32 i32 i32 i32 i32 i32) (result i32))
-			path_symlink: this.nosys( "path_symlink" ).bind( this ), // (param i32 i32 i32 i32 i32) (result i32))
-			path_unlink_file: this.nosys( "path_unlink_file" ).bind( this ), // (param i32 i32 i32) (result i32))
+			path_create_directory: undefined, // ((param i32 i32 i32) (result i32))
+			path_filestat_get: undefined, // ((param i32 i32 i32 i32 i32) (result i32))
+			path_filestat_set_times: undefined, // ((param i32 i32 i32 i32 i64 i64 i32) (result i32))
+			path_link: undefined, // ((param i32 i32 i32 i32 i32 i32 i32) (result i32))
+			path_open: undefined, // ((param i32 i32 i32 i32 i32 i64 i64 i32 i32) (result i32))
+			path_readlink: undefined, // ((param i32 i32 i32 i32 i32 i32) (result i32))
+			path_remove_directory: undefined, // ((param i32 i32 i32) (result i32))
+			path_rename: undefined, // ((param i32 i32 i32 i32 i32 i32) (result i32))
+			path_symlink: undefined, // ((param i32 i32 i32 i32 i32) (result i32))
+			path_unlink_file: undefined, // ((param i32 i32 i32) (result i32))
 
-			poll_oneoff: this.nosys( "poll_oneoff" ).bind( this ), // (param i32 i32 i32 i32) (result i32))
+			poll_oneoff: undefined, // ((param i32 i32 i32 i32) (result i32))
 
-			proc_exit: this.nosys( "proc_exit" ).bind( this ), // (param i32))
-			proc_raise: this.nosys( "proc_raise" ).bind( this ), // (param i32) (result i32))
+			proc_exit: undefined, // ((param i32))
+			proc_raise: undefined, // ((param i32) (result i32))
 
-			random_get: this.random_get.bind( this ), // (param i32 i32) (result i32))
+			random_get: this.random_get, // ((param i32 i32) (result i32))
 
-			sched_yield: this.nosys( "sched_yield" ).bind( this ), // (result i32))
+			sched_yield: undefined, // ((result i32))
 
-			sock_recv: this.nosys( "sock_recv" ).bind( this ), // (param i32 i32 i32 i32 i32 i32) (result i32))
-			sock_send: this.nosys( "sock_send" ).bind( this ), // (param i32 i32 i32 i32 i32) (result i32))
-			sock_shutdown: this.nosys( "sock_shutdown" ).bind( this ), // (param i32 i32) (result i32))
+			sock_recv: undefined, // ((param i32 i32 i32 i32 i32 i32) (result i32))
+			sock_send: undefined, // ((param i32 i32 i32 i32 i32) (result i32))
+			sock_shutdown: undefined, // ((param i32 i32) (result i32))
 		}
 	};
 
 
 	constructor( trace?: boolean )
 	{
-		if( trace )
+		for( let ns of Object.keys( this.imports ) )
 		{
-			for( let ns of Object.keys( this.imports ) )
-			{
-				const nameSpace = this.imports[ ns ];
+			const nameSpace = this.imports[ ns ];
 
-				for( let f of Object.keys( nameSpace ) )
-				{
-					const origFunc = nameSpace[ f ];
-					nameSpace[ f ] = this.trace( f, origFunc );
-				}
+			for( let fn of Object.keys( nameSpace ) )
+			{
+				let func = nameSpace[ fn ];
+
+				if( !func )
+					func = this.nosys( fn );
+
+				func = func.bind( this );
+
+				if( trace )
+					func = this.trace( fn, func ).bind( this );
+
+				nameSpace[ fn ] = func;
 			}
 		}
 	}
@@ -136,6 +143,79 @@ export class TinyWASI
 
 			return this.WASI_ERRNO_NOSYS;
 		}
+	}
+
+
+	private args_get( argvOut: number, argvBufOut: number ): number
+	{
+		return this.WASI_ERRNO_SUCCESS;
+	}
+
+	private args_sizes_get( argcOut: number, argvSizeOut: number ): number
+	{
+		const view = this.getDataView();
+
+		if( !view )
+			return this.WASI_ERRNO_FAULT;
+
+		view.setUint32( argcOut, 0, true );
+		view.setUint32( argvSizeOut, 0, true );
+
+		return this.WASI_ERRNO_SUCCESS;
+	}
+
+
+	private environ_get( sizeOut: number, environBufOut: number ): number
+	{
+		return this.WASI_ERRNO_SUCCESS;
+	}
+
+	private environ_sizes_get( environOut: number, environSizeOut: number ): number
+	{
+		const view = this.getDataView();
+
+		if( !view )
+			return this.WASI_ERRNO_FAULT;
+
+		view.setUint32( environOut, 0, true );
+		view.setUint32( environSizeOut, 0, true );
+
+		return this.WASI_ERRNO_SUCCESS;
+	}
+
+
+	private clock_res_get( id: number, resOut: number ): number
+	{
+		if( id != 0 )
+			return this.WASI_ERRNO_INVAL;
+
+		const view = this.getDataView();
+
+		if( !view )
+			return this.WASI_ERRNO_FAULT;
+
+		view.setUint32( resOut, 1000000.0 % 0xFFFFFFFF, true );
+		view.setUint32( resOut + 4, 1000000.0 / 0xFFFFFFFF, true );
+
+		return this.WASI_ERRNO_SUCCESS;
+	}
+
+	private clock_time_get( id: number, precision: number, timeOut: number ): number
+	{
+		if( id != 0 )
+			return this.WASI_ERRNO_INVAL;
+
+		const view = this.getDataView();
+
+		if( !view )
+			return this.WASI_ERRNO_FAULT;
+
+		const now = new Date().getTime();
+
+		view.setUint32( timeOut, ( now * 1000000.0 ) % 0xFFFFFFFF, true );
+		view.setUint32( timeOut + 4, now * 1000000.0 / 0xFFFFFFFF, true );
+
+		return this.WASI_ERRNO_SUCCESS;
 	}
 
 
@@ -202,20 +282,6 @@ export class TinyWASI
 		return this.WASI_ERRNO_SUCCESS;
 	}
 
-	private clock_time_get( clockId: number, precision: number, time: number ): number
-	{
-		const view = this.getDataView();
-
-		if( !view )
-			return this.WASI_ERRNO_FAULT;
-
-		const now = new Date().getTime();
-
-		view.setUint32( time, ( now * 1000000.0 ) % 0xFFFFFFFF, true );
-		view.setUint32( time + 4, now * 1000000.0 / 0xFFFFFFFF, true );
-
-		return this.WASI_ERRNO_SUCCESS;
-	}
 
 	private random_get( pointer: number, size: number ): number
 	{
