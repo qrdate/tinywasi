@@ -6,7 +6,6 @@ export class TinyWASI
 
 	private WASI_ERRNO_SUCCESS = 0;
 	private WASI_ERRNO_BADF = 8;
-	private WASI_ERRNO_FAULT = 21;
 	private WASI_ERRNO_NOSYS = 52;
 	private WASI_ERRNO_INVAL = 28;
 
@@ -81,10 +80,7 @@ export class TinyWASI
 
 			for( let fn of Object.keys( nameSpace ) )
 			{
-				let func = nameSpace[ fn ];
-
-				if( !func )
-					func = this.nosys( fn );
+				let func = nameSpace[ fn ] || this.nosys( fn );
 
 				func = func.bind( this );
 
@@ -105,16 +101,20 @@ export class TinyWASI
 	}
 
 
-	private getMemory(): WebAssembly.Memory | undefined
+	private getMemory(): WebAssembly.Memory
 	{
 		if( this.instance )
 			return ( this.instance.exports.memory as WebAssembly.Memory );
+		else
+			throw new Error( "Attempt to access instance before initialisation!" );
 	}
 
-	private getDataView(): DataView | undefined
+	private getDataView(): DataView
 	{
 		if( this.instance )
 			return new DataView( ( this.instance.exports.memory as WebAssembly.Memory ).buffer );
+		else
+			throw new Error( "Attempt to access instance before initialisation!" );
 	}
 
 	private trace( name: string, origFunc: CallableFunction ): CallableFunction
@@ -132,7 +132,6 @@ export class TinyWASI
 		return ( ...args: number[] ): number =>
 		{
 			console.error( `Unimplemented call to ${name}(${args.toString()})` );
-
 			return this.WASI_ERRNO_NOSYS;
 		}
 	}
@@ -144,9 +143,6 @@ export class TinyWASI
 			return this.WASI_ERRNO_INVAL;
 
 		const view = this.getDataView();
-
-		if( !view )
-			return this.WASI_ERRNO_FAULT;
 
 		view.setUint32( resOut, 1000000.0 % 0xFFFFFFFF, true );
 		view.setUint32( resOut + 4, 1000000.0 / 0xFFFFFFFF, true );
@@ -160,9 +156,6 @@ export class TinyWASI
 			return this.WASI_ERRNO_INVAL;
 
 		const view = this.getDataView();
-
-		if( !view )
-			return this.WASI_ERRNO_FAULT;
 
 		const now = new Date().getTime();
 
@@ -180,9 +173,6 @@ export class TinyWASI
 
 		const view = this.getDataView();
 
-		if( !view )
-			return this.WASI_ERRNO_FAULT;
-
 		view.setUint8( fdstat, this.WASI_FILETYPE_CHARACTER_DEVICE );
 		view.setUint16( fdstat + 2, 0b1, true );
 		view.setUint16( fdstat + 8, 0b101001, true );
@@ -198,9 +188,6 @@ export class TinyWASI
 
 		const view = this.getDataView();
 		const memory = this.getMemory();
-
-		if( !view || !memory )
-			return this.WASI_ERRNO_FAULT;
 
 		let buffers: Uint8Array[] = []
 
@@ -239,11 +226,7 @@ export class TinyWASI
 
 	private random_get( pointer: number, size: number ): number
 	{
-		const view = this.getDataView();
 		const memory = this.getMemory();
-
-		if( !view || !memory )
-			return this.WASI_ERRNO_FAULT;
 
 		const buffer = new Uint8Array( memory.buffer, pointer, size )
 
