@@ -15,14 +15,14 @@ export class TinyWASI
 	imports: { [ key: string ]: { [ key: string ]: CallableFunction | undefined } } = {
 		wasi_snapshot_preview1:
 		{
-			args_get: this.args_get, // ((param i32 i32) (result i32))
-			args_sizes_get: this.args_sizes_get, // ((param i32 i32) (result i32))
+			args_get: undefined, // ((param i32 i32) (result i32))
+			args_sizes_get: undefined, // ((param i32 i32) (result i32))
 
 			clock_res_get: this.clock_res_get, // ((param i32 i32) (result i32))
 			clock_time_get: this.clock_time_get, // ((param i32 i64 i32) (result i32))
 
-			environ_get: this.environ_get, // ((param i32 i32) (result i32))
-			environ_sizes_get: this.environ_sizes_get, // ((param i32 i32) (result i32))
+			environ_get: undefined, // ((param i32 i32) (result i32))
+			environ_sizes_get: undefined, // ((param i32 i32) (result i32))
 
 			fd_advise: undefined, // ((param i32 i64 i64 i32) (result i32))
 			fd_allocate: undefined, // ((param i32 i64 i64) (result i32))
@@ -104,14 +104,6 @@ export class TinyWASI
 		initialize();
 	}
 
-	start( instance: WebAssembly.Instance )
-	{
-		this.instance = instance;
-
-		const start = instance.exports._start as CallableFunction;
-		start();
-	}
-
 
 	private getMemory(): WebAssembly.Memory | undefined
 	{
@@ -143,44 +135,6 @@ export class TinyWASI
 
 			return this.WASI_ERRNO_NOSYS;
 		}
-	}
-
-
-	private args_get( argvOut: number, argvBufOut: number ): number
-	{
-		return this.WASI_ERRNO_SUCCESS;
-	}
-
-	private args_sizes_get( argcOut: number, argvSizeOut: number ): number
-	{
-		const view = this.getDataView();
-
-		if( !view )
-			return this.WASI_ERRNO_FAULT;
-
-		view.setUint32( argcOut, 0, true );
-		view.setUint32( argvSizeOut, 0, true );
-
-		return this.WASI_ERRNO_SUCCESS;
-	}
-
-
-	private environ_get( sizeOut: number, environBufOut: number ): number
-	{
-		return this.WASI_ERRNO_SUCCESS;
-	}
-
-	private environ_sizes_get( environOut: number, environSizeOut: number ): number
-	{
-		const view = this.getDataView();
-
-		if( !view )
-			return this.WASI_ERRNO_FAULT;
-
-		view.setUint32( environOut, 0, true );
-		view.setUint32( environSizeOut, 0, true );
-
-		return this.WASI_ERRNO_SUCCESS;
 	}
 
 
