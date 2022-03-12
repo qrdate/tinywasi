@@ -201,10 +201,7 @@ export class TinyWASI
 
 		const buffer = new Uint8Array( memory.buffer, pointer, size )
 
-		if( typeof window != "undefined" )
-			window.crypto.getRandomValues( buffer );
-		else
-			crypto.randomFillSync( buffer );
+		crypto.randomFillSync( buffer );
 
 		return this.WASI_ERRNO_SUCCESS;
 	}
