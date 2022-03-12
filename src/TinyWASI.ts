@@ -14,22 +14,60 @@ export class TinyWASI
 	imports = {
 		wasi_snapshot_preview1:
 		{
-			fd_write: this.fd_write.bind( this ),
-			fd_fdstat_get: this.fd_fdstat_get.bind( this ),
+			args_get: this.nosys( "args_get" ).bind( this ), // (param i32 i32) (result i32))
+			args_sizes_get: this.nosys( "args_sizes_get" ).bind( this ), // (param i32 i32) (result i32))
 
-			clock_time_get: this.clock_time_get.bind( this ),
+			clock_res_get: this.nosys( "clock_res_get" ).bind( this ), // (param i32 i32) (result i32))
+			clock_time_get: this.clock_time_get.bind( this ), // (param i32 i64 i32) (result i32))
 
-			random_get: this.random_get.bind( this ),
+			environ_get: this.nosys( "environ_get" ).bind( this ), // (param i32 i32) (result i32))
+			environ_sizes_get: this.nosys( "environ_sizes_get" ).bind( this ), // (param i32 i32) (result i32))
 
-			environ_sizes_get: this.nosys( "environ_sizes_get" ).bind( this ),
-			environ_get: this.nosys( "environ_get" ).bind( this ),
+			fd_advise: this.nosys( "fd_advise" ).bind( this ), // (param i32 i64 i64 i32) (result i32))
+			fd_allocate: this.nosys( "fd_allocate" ).bind( this ), // (param i32 i64 i64) (result i32))
+			fd_close: this.nosys( "fd_close" ).bind( this ), // (param i32) (result i32))
+			fd_datasync: this.nosys( "fd_datasync" ).bind( this ), // (param i32) (result i32))
+			fd_fdstat_get: this.fd_fdstat_get.bind( this ), // (param i32 i32) (result i32))
+			fd_fdstat_set_flags: this.nosys( "fd_fdstat_set_flags" ).bind( this ), // (param i32 i32) (result i32))
+			fd_fdstat_set_rights: this.nosys( "fd_fdstat_set_rights" ).bind( this ), // (param i32 i64 i64) (result i32))
+			fd_filestat_get: this.nosys( "fd_filestat_get" ).bind( this ), // (param i32 i32) (result i32))
+			fd_filestat_set_size: this.nosys( "fd_filestat_set_size" ).bind( this ), // (param i32 i64) (result i32))
+			fd_filestat_set_times: this.nosys( "fd_filestat_set_times" ).bind( this ), // (param i32 i64 i64 i32) (result i32))
+			fd_pread: this.nosys( "fd_pread" ).bind( this ), // (param i32 i32 i32 i64 i32) (result i32))
+			fd_prestat_dir_name: this.nosys( "fd_prestat_dir_name" ).bind( this ), // (param i32 i32 i32) (result i32))
+			fd_prestat_get: this.nosys( "fd_prestat_get" ).bind( this ), // (param i32 i32) (result i32))
+			fd_pwrite: this.nosys( "fd_pwrite" ).bind( this ), // (param i32 i32 i32 i64 i32) (result i32))
+			fd_read: this.nosys( "fd_read" ).bind( this ), // (param i32 i32 i32 i32) (result i32))
+			fd_readdir: this.nosys( "fd_readdir" ).bind( this ), // (param i32 i32 i32 i64 i32) (result i32))
+			fd_renumber: this.nosys( "fd_renumber" ).bind( this ), // (param i32 i32) (result i32))
+			fd_seek: this.nosys( "fd_seek" ).bind( this ), // (param i32 i64 i32 i32) (result i32))
+			fd_sync: this.nosys( "fd_sync" ).bind( this ), // (param i32) (result i32))
+			fd_tell: this.nosys( "fd_tell" ).bind( this ), // (param i32 i32) (result i32))
+			fd_write: this.fd_write.bind( this ), // (param i32 i32 i32 i32) (result i32))
 
-			fd_open: this.nosys( "fd_open" ).bind( this ),
-			fd_close: this.nosys( "fd_close" ).bind( this ),
-			fd_read: this.nosys( "fd_read" ).bind( this ),
-			fd_seek: this.nosys( "fd_seek" ).bind( this ),
+			path_create_directory: this.nosys( "path_create_directory" ).bind( this ), // (param i32 i32 i32) (result i32))
+			path_filestat_get: this.nosys( "path_filestat_get" ).bind( this ), // (param i32 i32 i32 i32 i32) (result i32))
+			path_filestat_set_times: this.nosys( "path_filestat_set_times" ).bind( this ), // (param i32 i32 i32 i32 i64 i64 i32) (result i32))
+			path_link: this.nosys( "path_link" ).bind( this ), // (param i32 i32 i32 i32 i32 i32 i32) (result i32))
+			path_open: this.nosys( "path_open" ).bind( this ), // (param i32 i32 i32 i32 i32 i64 i64 i32 i32) (result i32))
+			path_readlink: this.nosys( "path_readlink" ).bind( this ), // (param i32 i32 i32 i32 i32 i32) (result i32))
+			path_remove_directory: this.nosys( "path_remove_directory" ).bind( this ), // (param i32 i32 i32) (result i32))
+			path_rename: this.nosys( "path_rename" ).bind( this ), // (param i32 i32 i32 i32 i32 i32) (result i32))
+			path_symlink: this.nosys( "path_symlink" ).bind( this ), // (param i32 i32 i32 i32 i32) (result i32))
+			path_unlink_file: this.nosys( "path_unlink_file" ).bind( this ), // (param i32 i32 i32) (result i32))
 
-			proc_exit: this.nosys( "proc_exit" ).bind( this ),
+			poll_oneoff: this.nosys( "poll_oneoff" ).bind( this ), // (param i32 i32 i32 i32) (result i32))
+
+			proc_exit: this.nosys( "proc_exit" ).bind( this ), // (param i32))
+			proc_raise: this.nosys( "proc_raise" ).bind( this ), // (param i32) (result i32))
+
+			random_get: this.random_get.bind( this ), // (param i32 i32) (result i32))
+
+			sched_yield: this.nosys( "sched_yield" ).bind( this ), // (result i32))
+
+			sock_recv: this.nosys( "sock_recv" ).bind( this ), // (param i32 i32 i32 i32 i32 i32) (result i32))
+			sock_send: this.nosys( "sock_send" ).bind( this ), // (param i32 i32 i32 i32 i32) (result i32))
+			sock_shutdown: this.nosys( "sock_shutdown" ).bind( this ), // (param i32 i32) (result i32))
 		}
 	};
 
