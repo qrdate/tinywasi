@@ -148,8 +148,8 @@ export class TinyWASI
 
 		const view = this.getDataView();
 
-		view.setUint32( resOut, 1000000.0 % 0xFFFFFFFF, true );
-		view.setUint32( resOut + 4, 1000000.0 / 0xFFFFFFFF, true );
+		view.setUint32( resOut, 1000000.0 % 0x100000000, true );
+		view.setUint32( resOut + 4, 1000000.0 / 0x100000000, true );
 
 		return this.WASI_ERRNO_SUCCESS;
 	}
@@ -163,8 +163,8 @@ export class TinyWASI
 
 		const now = new Date().getTime();
 
-		view.setUint32( timeOut, ( now * 1000000.0 ) % 0xFFFFFFFF, true );
-		view.setUint32( timeOut + 4, now * 1000000.0 / 0xFFFFFFFF, true );
+		view.setUint32( timeOut, ( now * 1000000.0 ) % 0x100000000, true );
+		view.setUint32( timeOut + 4, now * 1000000.0 / 0x100000000, true );
 
 		return this.WASI_ERRNO_SUCCESS;
 	}
