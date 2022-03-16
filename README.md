@@ -8,7 +8,7 @@ and getting random numbers, which should really be enough for everyone.
 
 ## Example
 
-```
+```ts
 import { TinyWASI } from "tinywasi";
 
 let tinywasi = new TinyWASI();
