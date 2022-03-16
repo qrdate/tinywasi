@@ -10,6 +10,12 @@ export class TinyWASI {
 
     private WASI_FILETYPE_CHARACTER_DEVICE = 2;
 
+    private WASI_RIGHTS_FD_SYNC = 1 << 4;
+    private WASI_RIGHTS_FD_WRITE = 1 << 6;
+    private WASI_RIGHTS_FD_FILESTAT_GET = 1 << 21;
+
+    private WASI_FDFLAGS_APPEND = 1 << 0;
+
     private nameSpaces: { [key: string]: { [key: string]: CallableFunction | undefined } } = {
         wasi_snapshot_preview1: {
             args_get: undefined, // ((param i32 i32) (result i32))
@@ -152,8 +158,12 @@ export class TinyWASI {
         const view = this.getDataView();
 
         view.setUint8(fdstat, this.WASI_FILETYPE_CHARACTER_DEVICE);
-        view.setUint16(fdstat + 2, 0b1, true);
-        view.setUint16(fdstat + 8, 0b101001, true);
+        view.setUint16(fdstat + 2, this.WASI_FDFLAGS_APPEND, true);
+        view.setUint16(
+            fdstat + 8,
+            this.WASI_RIGHTS_FD_SYNC | this.WASI_RIGHTS_FD_WRITE | this.WASI_RIGHTS_FD_FILESTAT_GET,
+            true,
+        );
         view.setUint16(fdstat + 16, 0, true);
 
         return this.WASI_ERRNO_SUCCESS;
