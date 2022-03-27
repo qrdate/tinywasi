@@ -1,16 +1,27 @@
 {
   "name": "tinywasi",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A tiny WASI runtime",
-  "main": "dist/TinyWASI.js",
   "types": "dist/TinyWASI.d.ts",
   "type": "module",
+  "exports": {
+      "./types": "./dist/TinyWASI.d.ts",
+      "./package.json": "./package.json",
+      ".": "./dist/TinyWASI.js"
+  },
   "scripts": {
     "prepare": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "QRDate",
+  "engines": {
+      "node": "^14.19.0 || >=16.0.0"
+  },
   "license": "MIT",
+  "author": "QRDate.org + contributors",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/qrdate/tinywasi.git"
+  },
   "devDependencies": {
     "@types/node": "^17.0.21",
     "typescript": "^4.6.2"
